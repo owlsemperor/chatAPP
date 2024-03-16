@@ -2,7 +2,8 @@ import path from 'path'
 import { fileURLToPath } from 'url' // Import fileURLToPath function
 
 // Use fileURLToPath to get the directory path
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const __dirname = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
+
 import express from 'express'
 import dotenv from 'dotenv'
 dotenv.config()
@@ -23,11 +24,17 @@ app.use('/api/auth', authRouter)
 app.use('/api/messages', messageRouter)
 app.use('/api/user', userRouter)
 
-app.use(express.static(path.join(__dirname, '/frontend/dist')))
+app.use(express.static(path.join(__dirname, 'fronted', 'dist')))
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'))
+  res.sendFile(path.join(__dirname, 'fronted', 'dist', 'index.html'))
 })
+console.log('__dirname:', __dirname)
+console.log(
+  'Resolved path:',
+  path.join(__dirname, 'frontend', 'dist', 'index.html')
+)
+
 server.listen(port, () => {
   connectToDB()
   console.log(`Server is listening on the port ${port}`)
