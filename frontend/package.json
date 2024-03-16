@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "message-app": "file:.."
+  }
+}
