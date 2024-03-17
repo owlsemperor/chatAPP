@@ -1,8 +1,8 @@
 import path from 'path'
-import { fileURLToPath } from 'url' // Import fileURLToPath function
+import { fileURLToPath } from 'url'
 
 // Use fileURLToPath to get the directory path
-const __dirname = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 import express from 'express'
 import dotenv from 'dotenv'
@@ -18,22 +18,22 @@ import { app, server } from './socket/socket.js'
 const port = process.env.PORT || 5000
 
 app.use(express.json())
-
 app.use(cookieParser())
 app.use('/api/auth', authRouter)
 app.use('/api/messages', messageRouter)
 app.use('/api/user', userRouter)
 
-app.use(express.static(path.join(__dirname, 'fronted', 'dist')))
+// Serve static files from the frontend/dist directory
+const frontendPath = path.join(__dirname, '../frontend/dist')
+app.use(express.static(frontendPath))
 
+// Catch-all route for SPA
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'fronted', 'dist', 'index.html'))
+  res.sendFile(path.join(frontendPath, 'index.html'))
 })
+
 console.log('__dirname:', __dirname)
-console.log(
-  'Resolved path:',
-  path.join(__dirname, 'frontend', 'dist', 'index.html')
-)
+console.log('Resolved path:', path.join(frontendPath, 'index.html'))
 
 server.listen(port, () => {
   connectToDB()
